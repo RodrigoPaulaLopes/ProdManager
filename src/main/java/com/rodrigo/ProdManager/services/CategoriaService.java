@@ -19,4 +19,8 @@ public class CategoriaService {
     public Page<Categoria> findAll(Pageable paginacao){
         return categoriaRepository.findAll(paginacao);
     }
+
+    public Categoria findById(long id){
+        return categoriaRepository.findById(id).get();
+    }
 }

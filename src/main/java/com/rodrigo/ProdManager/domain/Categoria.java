@@ -1,9 +1,12 @@
 package com.rodrigo.ProdManager.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,4 +23,13 @@ public class Categoria implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "categorias")
+    private List<Produto> produtos = new ArrayList<>();
+
+    public Categoria(Long id, String nome) {
+        this.id = id;
+        this.nome = nome;
+    }
 }

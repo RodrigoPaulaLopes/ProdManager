@@ -1,5 +1,7 @@
 package com.rodrigo.ProdManager.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,11 +23,12 @@ public class Produto {
     private String nome;
     private Double preco;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "produto_categoria", joinColumns = @JoinColumn(name = "produto_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
     private List<Categoria> categorias = new ArrayList<>();
 
-    public Produto( String nome, Double preco) {
+    public Produto(String nome, Double preco) {
         this.nome = nome;
         this.preco = preco;
     }

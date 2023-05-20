@@ -1,6 +1,6 @@
 package com.rodrigo.ProdManager.resources;
 
-import com.rodrigo.ProdManager.domain.Categoria;
+import com.rodrigo.ProdManager.dtos.ListarCategoriaProdutosDTO;
 import com.rodrigo.ProdManager.services.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,12 +18,12 @@ public class CategoriaResource {
     @Autowired
     private CategoriaService categoriaService;
     @GetMapping
-    public ResponseEntity<Page<Categoria>> findAll(Pageable paginacao){
+    public ResponseEntity<Page<ListarCategoriaProdutosDTO>> findAll(Pageable paginacao){
         return ResponseEntity.ok().body(categoriaService.findAll(paginacao));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Categoria> findById(@PathVariable long id){
+    public ResponseEntity<ListarCategoriaProdutosDTO> findById(@PathVariable long id){
         return ResponseEntity.ok().body(categoriaService.findById(id));
     }
 }

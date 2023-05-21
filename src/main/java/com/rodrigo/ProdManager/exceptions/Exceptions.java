@@ -13,10 +13,10 @@ public class Exceptions {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity entidadeNaoEncotrada(){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RecursoNaoEncontrado(HttpStatus.NOT_FOUND, "Recurso não encontrado"));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RecursoNaoEncontrado("Recurso não encontrado"));
     }
 
-    public record RecursoNaoEncontrado(HttpStatus code, String mensagem){
+    public record RecursoNaoEncontrado(String mensagem){
 
     }
 }

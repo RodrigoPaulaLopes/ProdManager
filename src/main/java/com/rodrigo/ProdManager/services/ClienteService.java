@@ -20,4 +20,8 @@ public class ClienteService {
     public Page<ListarClientesDTO> findAll(Pageable paginacao){
         return clienteRepository.findAll(paginacao).map(ListarClientesDTO::new);
     }
+
+    public ListarClientesDTO findById(Long id){
+        return new ListarClientesDTO(clienteRepository.getReferenceById(id));
+    }
 }

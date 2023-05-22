@@ -6,9 +6,9 @@ import com.rodrigo.ProdManager.enums.TipoCliente;
 import java.util.List;
 import java.util.Set;
 
-public record ListarClientesDTO(Long id, String nome, String email, String cpfOuCnpj, TipoCliente tipo, List<ListarEnderecoDTO> enderecos, Set<String> telefones) {
+public record ListarClientesDTO(Long id, String nome, String email, String cpfOuCnpj, String tipo, List<ListarEnderecoDTO> enderecos, Set<String> telefones) {
 
     public ListarClientesDTO(Cliente cliente){
-        this(cliente.getId(), cliente.getNome(), cliente.getEmail(), cliente.getCpfOuCnpj(), cliente.getTipoCliente(), cliente.getEnderecos().stream().map(ListarEnderecoDTO::new).toList(), cliente.getTelefones());
+        this(cliente.getId(), cliente.getNome(), cliente.getEmail(), cliente.getCpfOuCnpj(), cliente.getTipoCliente().getTipo(), cliente.getEnderecos().stream().map(ListarEnderecoDTO::new).toList(), cliente.getTelefones());
     }
 }

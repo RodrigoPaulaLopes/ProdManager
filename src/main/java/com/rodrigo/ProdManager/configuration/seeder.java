@@ -1,13 +1,17 @@
 package com.rodrigo.ProdManager.configuration;
 
 import com.rodrigo.ProdManager.domain.*;
+import com.rodrigo.ProdManager.enums.EstadoPagamento;
 import com.rodrigo.ProdManager.enums.TipoCliente;
 import com.rodrigo.ProdManager.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Arrays;
+import java.util.Date;
 
 @Configuration
 public class seeder implements CommandLineRunner {
@@ -27,6 +31,12 @@ public class seeder implements CommandLineRunner {
 
     @Autowired
     private ClienteRepository clienteRepository;
+
+    @Autowired
+    private PedidoRepository pedidoRepository;
+
+    @Autowired
+    private PagamentoRepository pagamentoRepository;
 
 
     @Override
@@ -77,6 +87,22 @@ public class seeder implements CommandLineRunner {
         clienteRepository.saveAll(Arrays.asList(cli1, cli2));
         enderecoRepository.saveAll(Arrays.asList(endereco1, endereco2, endereco3));
 
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+        var ped1 = new Pedido(null, sdf.parse("30/09/2023 10:32"), endereco1, cli1);
+        var ped2 = new Pedido(null, sdf.parse("30/09/2023 10:32"), endereco2, cli2);
+
+        var pagamento1 = new PagamentoCartao(null, EstadoPagamento.QUITADO, ped1, 2);
+        var pagamento2 = new PagamentoBoleto(null, EstadoPagamento.PENDENTE, ped2, sdf.parse("22/05/2023 08:50"), null);
+
+        ped1.setPagamento(pagamento1);
+        ped2.setPagamento(pagamento2);
+
+        cli1.getPedidos().add(ped1);
+        cli2.getPedidos().add(ped2);
+
+        pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
+        pagamentoRepository.saveAll(Arrays.asList(pagamento1, pagamento2));
 
 
 

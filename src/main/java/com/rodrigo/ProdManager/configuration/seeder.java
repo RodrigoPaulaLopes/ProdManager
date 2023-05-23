@@ -38,6 +38,9 @@ public class seeder implements CommandLineRunner {
     @Autowired
     private PagamentoRepository pagamentoRepository;
 
+    @Autowired
+    private ItemPedidoRepository itemPedidoRepository;
+
 
     @Override
     public void run(String... args) throws Exception {
@@ -49,8 +52,8 @@ public class seeder implements CommandLineRunner {
 
         categoriaRepository.saveAll(Arrays.asList(c1, c2, c3));
 
-        var p1 = new Produto("Resident Evil 4 Remake", 230.00 );
-        var p2 = new Produto( "Playstation 5", 230.00);
+        var p1 = new Produto("Resident Evil 4 Remake", 230.00);
+        var p2 = new Produto("Playstation 5", 230.00);
         var p3 = new Produto("Mesa Para Notebook", 230.00);
 
 
@@ -71,8 +74,8 @@ public class seeder implements CommandLineRunner {
         cidadeRepository.saveAll(Arrays.asList(cidade1, cidade2, cidade3));
 
 
-        var cli1 = new Cliente(null, "Rodrigo de paula", "rodrigo.paula@email.com", "159.853.107-79",  TipoCliente.PESSOAFISICA);
-        var cli2 = new Cliente(null, "Camille Marques", "camille.marques@email.com", "033.525.788-80",  TipoCliente.PESSOAFISICA);
+        var cli1 = new Cliente(null, "Rodrigo de paula", "rodrigo.paula@email.com", "159.853.107-79", TipoCliente.PESSOAFISICA);
+        var cli2 = new Cliente(null, "Camille Marques", "camille.marques@email.com", "033.525.788-80", TipoCliente.PESSOAFISICA);
 
         cli1.getTelefones().addAll(Arrays.asList("(21) 99604-1143", "(21) 99489-4638"));
         cli2.getTelefones().addAll(Arrays.asList("(21) 99604-1143", "(21) 99489-4638"));
@@ -105,6 +108,18 @@ public class seeder implements CommandLineRunner {
         pagamentoRepository.saveAll(Arrays.asList(pagamento1, pagamento2));
 
 
+        var ip1 = new ItemPedido(p1, ped1, 0.00, 1, 2000.00);
+        var ip2 = new ItemPedido(p3, ped1, 0.00, 2, 80.00);
+        var ip3 = new ItemPedido(p2, ped2, 100.00, 1, 800.00);
+
+        ped1.getItems().addAll(Arrays.asList(ip1, ip2));
+        ped2.getItems().add(ip3);
+
+        p1.getItems().add(ip1);
+        p2.getItems().add(ip3);
+        p3.getItems().add(ip2);
+
+        itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 
 
     }

@@ -1,5 +1,8 @@
 package com.rodrigo.ProdManager.services;
 
+import com.rodrigo.ProdManager.domain.Categoria;
+import com.rodrigo.ProdManager.dtos.InserirCategoriaDTO;
+import com.rodrigo.ProdManager.dtos.ListarCategoriaDTO;
 import com.rodrigo.ProdManager.dtos.ListarCategoriaProdutosDTO;
 import com.rodrigo.ProdManager.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,5 +25,9 @@ public class CategoriaService {
 
     public ListarCategoriaProdutosDTO findById(long id){
         return new ListarCategoriaProdutosDTO(categoriaRepository.getReferenceById(id));
+    }
+    public ListarCategoriaDTO create(InserirCategoriaDTO dados){
+        var categoria = new Categoria(dados);
+        return new ListarCategoriaDTO(categoriaRepository.save(categoria));
     }
 }

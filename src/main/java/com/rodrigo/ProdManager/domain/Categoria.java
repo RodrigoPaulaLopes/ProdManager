@@ -2,6 +2,7 @@ package com.rodrigo.ProdManager.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.rodrigo.ProdManager.dtos.InserirCategoriaDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,5 +33,9 @@ public class Categoria implements Serializable {
     public Categoria(Long id, String nome) {
         this.id = id;
         this.nome = nome;
+    }
+
+    public Categoria(InserirCategoriaDTO dados) {
+        this.setNome(dados.nome());
     }
 }

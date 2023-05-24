@@ -1,5 +1,6 @@
 package com.rodrigo.ProdManager.domain;
 
+import com.rodrigo.ProdManager.dtos.AtualizarClienteDTO;
 import com.rodrigo.ProdManager.enums.TipoCliente;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,6 +32,8 @@ public class Cliente implements Serializable {
         this.setTipoCliente(tipoCliente);
     }
 
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -56,5 +59,13 @@ public class Cliente implements Serializable {
 
     public TipoCliente getTipoCliente() {
         return TipoCliente.toEnum(tipoCliente);
+    }
+
+    public void atualizar(AtualizarClienteDTO clienteDTO){
+        this.setId(clienteDTO.id());
+        this.setNome(clienteDTO.nome());
+        this.setEmail(clienteDTO.email());
+        this.setCpfOuCnpj(clienteDTO.cpfOuCnpj());
+        this.setTipoCliente(TipoCliente.toEnum(clienteDTO.tipo()));
     }
 }

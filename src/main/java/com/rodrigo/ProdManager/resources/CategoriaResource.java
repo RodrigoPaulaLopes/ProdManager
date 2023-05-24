@@ -1,9 +1,11 @@
 package com.rodrigo.ProdManager.resources;
 
+import com.rodrigo.ProdManager.dtos.AtualizarCategoriaDTO;
 import com.rodrigo.ProdManager.dtos.InserirCategoriaDTO;
 import com.rodrigo.ProdManager.dtos.ListarCategoriaDTO;
 import com.rodrigo.ProdManager.dtos.ListarCategoriaProdutosDTO;
 import com.rodrigo.ProdManager.services.CategoriaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,10 +32,25 @@ public class CategoriaResource {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<ListarCategoriaDTO> create(@RequestBody InserirCategoriaDTO dados, UriComponentsBuilder builder){
+    public ResponseEntity<ListarCategoriaDTO> create(@Valid @RequestBody InserirCategoriaDTO dados, UriComponentsBuilder builder){
         var categoria = categoriaService.create(dados);
         var uri = builder.path("/categorias/{id}").buildAndExpand(categoria.id()).toUri();
         return ResponseEntity.created(uri).body(categoria);
+
+    }
+
+    @PutMapping
+    @Transactional
+    public ResponseEntity<ListarCategoriaDTO> update(@Valid  @RequestBody AtualizarCategoriaDTO dados){
+        var categoria = categoriaService.update(dados);
+        return ResponseEntity.ok().body(categoria);
+
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable long id){
+         categoriaService.delete(id);
+        return ResponseEntity.noContent().build();
 
     }
 }

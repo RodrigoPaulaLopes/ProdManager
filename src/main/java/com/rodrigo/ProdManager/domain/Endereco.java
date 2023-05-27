@@ -1,5 +1,6 @@
 package com.rodrigo.ProdManager.domain;
 
+import com.rodrigo.ProdManager.dtos.InserirClienteDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,6 +25,17 @@ public class Endereco implements Serializable {
     private String numero;
     private String complemento;
     private String bairro;
+
+
+    public Endereco(InserirClienteDTO dados, Cidade cidade, Cliente cliente) {
+        this.logradouro = dados.logradouro();
+        this.numero = dados.numero();
+        this.complemento = dados.complemento();
+        this.bairro = dados.bairro();
+        this.cep = dados.cep();
+        this.cidade = cidade;
+        this.cliente = cliente;
+    }
 
     private String cep;
     @ManyToOne

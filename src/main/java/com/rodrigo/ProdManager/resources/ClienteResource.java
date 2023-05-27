@@ -1,10 +1,7 @@
 package com.rodrigo.ProdManager.resources;
 
 import com.rodrigo.ProdManager.domain.Cliente;
-import com.rodrigo.ProdManager.dtos.AtualizarCategoriaDTO;
-import com.rodrigo.ProdManager.dtos.AtualizarClienteDTO;
-import com.rodrigo.ProdManager.dtos.ListarCategoriaDTO;
-import com.rodrigo.ProdManager.dtos.ListarClientesDTO;
+import com.rodrigo.ProdManager.dtos.*;
 import com.rodrigo.ProdManager.services.ClienteService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.function.EntityResponse;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.swing.text.html.parser.Entity;
 
@@ -35,6 +33,15 @@ public class ClienteResource {
         return ResponseEntity.ok().body(clienteService.findById(id));
     }
 
+    @PostMapping
+    @Transactional
+    public ResponseEntity<ListarClientesDTO> create(@Valid @RequestBody InserirClienteDTO dados, UriComponentsBuilder builder){
+
+        var cliente = clienteService.create(dados);
+        var uri = builder.path("/clientes/{id}").buildAndExpand(cliente.id()).toUri();
+        return ResponseEntity.created(uri).body(cliente);
+
+    }
     @PutMapping
     @Transactional
     public ResponseEntity<ListarClientesDTO> update(@Valid @RequestBody AtualizarClienteDTO dados){

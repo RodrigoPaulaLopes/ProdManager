@@ -1,5 +1,6 @@
 package com.rodrigo.ProdManager.domain;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.rodrigo.ProdManager.enums.EstadoPagamento;
 import jakarta.persistence.Entity;
 import lombok.*;
@@ -11,6 +12,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @Entity
+@JsonTypeName("pagamentoComBoleto")
 public class PagamentoBoleto extends Pagamento implements Serializable {
     @Serial
     private final static long serialVersionUID = 1L;

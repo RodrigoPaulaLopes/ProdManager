@@ -1,5 +1,6 @@
 package com.rodrigo.ProdManager.domain;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.rodrigo.ProdManager.enums.EstadoPagamento;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,6 +16,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "pagamentos")
 @Inheritance(strategy = InheritanceType.JOINED)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type")
 public abstract class Pagamento implements Serializable {
     @Serial
     private final static long serialVersionUID = 1L;

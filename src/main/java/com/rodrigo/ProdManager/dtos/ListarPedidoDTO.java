@@ -7,9 +7,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public record ListarPedidoDTO(Integer id, Date instante, ListarPagamentoDTO pagamento, ListarEnderecoDTO endereco, ListarClientesDTO cliente, Set<ListarItemPedidoDTO> pedidos) {
+public record ListarPedidoDTO(Integer id, Date instante, ListarPagamentoDTO pagamento, ListarEnderecoDTO endereco, ListarClientesDTO cliente, Set<ListarItemPedidoDTO> pedidos, double total) {
 
     public ListarPedidoDTO(Pedido pedido){
-        this(pedido.getId(), pedido.getInstante(), new ListarPagamentoDTO(pedido.getPagamento()), new ListarEnderecoDTO(pedido.getEnderecoEntrega()), new ListarClientesDTO(pedido.getCliente()), pedido.getItems().stream().map(ListarItemPedidoDTO::new).collect(Collectors.toSet()));
+        this(pedido.getId(), pedido.getInstante(), new ListarPagamentoDTO(pedido.getPagamento()), new ListarEnderecoDTO(pedido.getEnderecoEntrega()), new ListarClientesDTO(pedido.getCliente()), pedido.getItems().stream().map(ListarItemPedidoDTO::new).collect(Collectors.toSet()), pedido.getTotal());
     }
 }

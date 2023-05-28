@@ -18,8 +18,6 @@ public class URL {
             var num = Long.parseLong(numeros[x]);
             numerosLista.add(num);
         }
-
-
         return numerosLista;
     }
 }

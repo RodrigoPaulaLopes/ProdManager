@@ -108,9 +108,13 @@ public class seeder implements CommandLineRunner {
         pagamentoRepository.saveAll(Arrays.asList(pagamento1, pagamento2));
 
 
-        var ip1 = new ItemPedido(p1, ped1, 0.00, 1, 2000.00);
-        var ip2 = new ItemPedido(p3, ped1, 0.00, 2, 80.00);
-        var ip3 = new ItemPedido(p2, ped2, 100.00, 1, 800.00);
+        var ip1 = new ItemPedido(p1, ped1, 0.00, 1);
+        var ip2 = new ItemPedido(p3, ped1, 0.00, 2);
+        var ip3 = new ItemPedido(p2, ped2, 100.00, 1);
+
+        ip1.setPreco(p1.getPreco() * ip1.getQuantidade());
+        ip2.setPreco(p3.getPreco() * ip2.getQuantidade());
+        ip3.setPreco(p2.getPreco() * ip3.getQuantidade());
 
         ped1.getItems().addAll(Arrays.asList(ip1, ip2));
         ped2.getItems().add(ip3);

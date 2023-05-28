@@ -1,10 +1,14 @@
 package com.rodrigo.ProdManager.domain;
 
+import com.rodrigo.ProdManager.dtos.InserirPedidoDTO;
+import com.rodrigo.ProdManager.enums.EstadoPagamento;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,6 +23,7 @@ import java.util.Set;
 public class Pedido implements Serializable {
     @Serial
     private final static long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -43,5 +48,13 @@ public class Pedido implements Serializable {
         this.instante = instante;
         this.enderecoEntrega = enderecoEntrega;
         this.cliente = cliente;
+    }
+
+    public double getTotal(){
+        var soma = 0.0;
+        for(ItemPedido itemPedido : items){
+            soma = soma + itemPedido.getSubTotal();
+        }
+        return soma;
     }
 }

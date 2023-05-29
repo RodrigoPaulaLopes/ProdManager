@@ -1,6 +1,8 @@
 package com.rodrigo.ProdManager.configuration;
 
 import com.rodrigo.ProdManager.services.DatabaseService;
+import com.rodrigo.ProdManager.services.EmailService;
+import com.rodrigo.ProdManager.services.SmtpEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -26,5 +28,10 @@ public class DevConfig {
         databaseService.instantiateTestDatabase();
 
         return true;
+    }
+
+    @Bean
+    public EmailService emailService(){
+        return new SmtpEmailService();
     }
 }

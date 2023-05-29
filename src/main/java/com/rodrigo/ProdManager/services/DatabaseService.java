@@ -66,8 +66,8 @@ public class DatabaseService {
         cidadeRepository.saveAll(Arrays.asList(cidade1, cidade2, cidade3));
 
 
-        var cli1 = new Cliente(null, "Rodrigo de paula", "rodrigo.paula@email.com", "159.853.107-79", TipoCliente.PESSOAFISICA);
-        var cli2 = new Cliente(null, "Camille Marques", "camille.marques@email.com", "033.525.788-80", TipoCliente.PESSOAFISICA);
+        var cli1 = new Cliente(null, "Rodrigo de paula", "rodrigolopesti1@gmail.com", "159.853.107-79", TipoCliente.PESSOAFISICA);
+        var cli2 = new Cliente(null, "Camille Marques", "rodrigolopesti1@gmail.com", "033.525.788-80", TipoCliente.PESSOAFISICA);
 
         cli1.getTelefones().addAll(Arrays.asList("(21) 99604-1143", "(21) 99489-4638"));
         cli2.getTelefones().addAll(Arrays.asList("(21) 99604-1143", "(21) 99489-4638"));

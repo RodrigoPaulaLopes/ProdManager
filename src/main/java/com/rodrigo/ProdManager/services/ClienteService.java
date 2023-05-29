@@ -12,6 +12,8 @@ import com.rodrigo.ProdManager.repository.EstadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,7 +35,8 @@ public class ClienteService {
     @Autowired
     private EnderecoRepository enderecoRepository;
 
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public Page<ListarClientesDTO> findAll(Pageable paginacao){
         return clienteRepository.findAll(paginacao).map(ListarClientesDTO::new);
@@ -45,6 +48,8 @@ public class ClienteService {
 
     public ListarClientesDTO update(AtualizarClienteDTO dados) {
         var cliente = clienteRepository.getReferenceById(dados.id());
+        var novaSenha = passwordEncoder.encode(dados.senha());
+        cliente.setSenha(novaSenha);
         cliente.atualizar(dados);
         return new ListarClientesDTO(clienteRepository.save(cliente));
     }
@@ -55,7 +60,10 @@ public class ClienteService {
         estado.setCidades(Arrays.asList(cidade));
         cidade.setEstado(estado);
 
+
         Cliente cli = new Cliente(dados);
+        var novaSenha = passwordEncoder.encode(dados.senha());
+        cli.setSenha(novaSenha);
         Endereco end = new Endereco(dados, cidade, cli);
 
         cli.getEnderecos().add(end);

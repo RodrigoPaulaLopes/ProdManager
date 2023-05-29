@@ -13,6 +13,9 @@ public record InserirClienteDTO(
         String email,
         @NotBlank(message = "Campo não pode estar vazio") @Pattern(regexp = "\\d{3}\\.?\\d{3}\\.?\\d{3}-?\\d{2}", message = "CPF ou CNPJ inválido")
         String cpfOuCnpj,
+
+        @NotBlank
+        String senha,
         @NotNull
         Integer tipo,
         @NotBlank(message = "Campo não pode estar vazio")

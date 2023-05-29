@@ -37,6 +37,7 @@ public class Cliente implements Serializable {
         this.setNome(dados.nome());
         this.setEmail(dados.email());
         this.setCpfOuCnpj(dados.cpfOuCnpj());
+        this.setSenha(dados.senha());
         this.setTipoCliente(TipoCliente.toEnum(dados.tipo()));
     }
 
@@ -48,6 +49,7 @@ public class Cliente implements Serializable {
     private String nome;
     private String email;
     private String cpfOuCnpj;
+    private String senha;
 
     private Integer tipoCliente;
 
@@ -74,6 +76,7 @@ public class Cliente implements Serializable {
         this.setNome(clienteDTO.nome());
         this.setEmail(clienteDTO.email());
         this.setCpfOuCnpj(clienteDTO.cpfOuCnpj());
+        this.setSenha(clienteDTO.senha());
         this.setTipoCliente(TipoCliente.toEnum(clienteDTO.tipo()));
     }
 

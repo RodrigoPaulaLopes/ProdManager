@@ -41,6 +41,8 @@ public class PedidoService {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @Autowired
+    private EmailService emailService;
 
     public Page<ListarPedidoDTO> findAll(Pageable paginacao) {
         return pedidoRepository.findAll(paginacao).map(ListarPedidoDTO::new);
@@ -51,8 +53,8 @@ public class PedidoService {
     }
 
 
-    public ListarPedidoDTO create(Pedido obj){
-        var endereco =enderecoRepository.getReferenceById(obj.getEnderecoEntrega().getId());
+    public ListarPedidoDTO create(Pedido obj) {
+        var endereco = enderecoRepository.getReferenceById(obj.getEnderecoEntrega().getId());
 
         var cliente = clienteRepository.getReferenceById(obj.getCliente().getId());
 
@@ -62,7 +64,7 @@ public class PedidoService {
         obj.getPagamento().setPedido(obj);
         obj.setInstante(new Date());
 
-        if(obj.getPagamento() instanceof PagamentoBoleto){
+        if (obj.getPagamento() instanceof PagamentoBoleto) {
             var pgto = (PagamentoBoleto) obj.getPagamento();
             boletoService.preencherPagamentoComBoleto(pgto, obj.getInstante());
         }
@@ -71,7 +73,7 @@ public class PedidoService {
         pagamentoRepository.save(obj.getPagamento());
 
 
-        for(ItemPedido itemPedido : obj.getItems()) {
+        for (ItemPedido itemPedido : obj.getItems()) {
             itemPedido.setDesconto(0.0);
             itemPedido.setPreco(produtoRepository.getReferenceById(itemPedido.getProduto().getId()).getPreco() * itemPedido.getQuantidade());
             itemPedido.getProduto().setNome(produtoRepository.getReferenceById(itemPedido.getProduto().getId()).getNome());
@@ -81,6 +83,7 @@ public class PedidoService {
 
 
         itemPedidoRepository.saveAll(obj.getItems());
+        emailService.sendOrderConfirmationEmail(obj);
         return new ListarPedidoDTO(pedido);
     }
 }

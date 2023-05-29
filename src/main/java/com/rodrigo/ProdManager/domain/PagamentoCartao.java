@@ -26,4 +26,6 @@ public class PagamentoCartao extends Pagamento implements Serializable {
         super(id, estadoPagamento.getCod(), pedido);
         this.numParcelas = numParcelas;
     }
+
+
 }

@@ -76,4 +76,6 @@ public class Cliente implements Serializable {
         this.setCpfOuCnpj(clienteDTO.cpfOuCnpj());
         this.setTipoCliente(TipoCliente.toEnum(clienteDTO.tipo()));
     }
+
+
 }

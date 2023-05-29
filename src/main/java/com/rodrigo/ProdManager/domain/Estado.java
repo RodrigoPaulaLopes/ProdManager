@@ -34,4 +34,5 @@ public class Estado implements Serializable {
         this.setId(id);
         this.setNome(nome);
     }
+
 }

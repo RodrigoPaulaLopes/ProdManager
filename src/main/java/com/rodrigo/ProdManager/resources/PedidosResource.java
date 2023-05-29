@@ -34,7 +34,7 @@ public class PedidosResource {
     public ResponseEntity<ListarPedidoDTO> create(@RequestBody Pedido dados, UriComponentsBuilder builder){
         ListarPedidoDTO pedido = pedidoService.create(dados);
         var uri = builder.path("/pedidos/{id}").buildAndExpand(pedido.id()).toUri();
-
+        System.out.println(dados);
         return ResponseEntity.created(uri).body(pedido);
 //        return ResponseEntity.ok().body(dados);
     }

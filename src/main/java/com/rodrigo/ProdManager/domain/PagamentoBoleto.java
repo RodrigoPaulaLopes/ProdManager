@@ -24,4 +24,6 @@ public class PagamentoBoleto extends Pagamento implements Serializable {
         this.dataVencimento = dataVencimento;
         this.dataPagamento = dataPagamento;
     }
+
+
 }

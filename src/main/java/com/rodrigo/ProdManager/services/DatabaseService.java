@@ -2,6 +2,7 @@ package com.rodrigo.ProdManager.services;
 
 import com.rodrigo.ProdManager.domain.*;
 import com.rodrigo.ProdManager.enums.EstadoPagamento;
+import com.rodrigo.ProdManager.enums.PerfilCliente;
 import com.rodrigo.ProdManager.enums.TipoCliente;
 import com.rodrigo.ProdManager.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,8 +74,10 @@ public class DatabaseService {
 
         var cli1 = new Cliente(null, "Rodrigo de paula", "rodrigolopesti1@gmail.com", "159.853.107-79", TipoCliente.PESSOAFISICA);
         cli1.setSenha(bCryptPasswordEncoder.encode("1234"));
+        cli1.addPerfilCliente(PerfilCliente.ADMIN);
         var cli2 = new Cliente(null, "Camille Marques", "rodrigolopesti1@gmail.com", "033.525.788-80", TipoCliente.PESSOAFISICA);
         cli2.setSenha(bCryptPasswordEncoder.encode("1234"));
+        cli2.addPerfilCliente(PerfilCliente.CLIENTE);
         cli1.getTelefones().addAll(Arrays.asList("(21) 99604-1143", "(21) 99489-4638"));
         cli2.getTelefones().addAll(Arrays.asList("(21) 99604-1143", "(21) 99489-4638"));
 

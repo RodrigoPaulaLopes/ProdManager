@@ -2,6 +2,7 @@ package com.rodrigo.ProdManager.domain;
 
 import com.rodrigo.ProdManager.dtos.AtualizarClienteDTO;
 import com.rodrigo.ProdManager.dtos.InserirClienteDTO;
+import com.rodrigo.ProdManager.enums.PerfilCliente;
 import com.rodrigo.ProdManager.enums.TipoCliente;
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,9 +13,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode(of = "id")
@@ -25,6 +26,9 @@ public class Cliente implements Serializable {
     private final static long serialVersionUID = 1L;
 
 
+    public Cliente(){
+        this.addPerfilCliente(PerfilCliente.CLIENTE);
+    }
     public Cliente(Long id, String nome, String email, String cpfOuCnpj, TipoCliente tipoCliente) {
         this.setId(id);
         this.setNome(nome);
@@ -42,7 +46,6 @@ public class Cliente implements Serializable {
     }
 
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -50,6 +53,11 @@ public class Cliente implements Serializable {
     private String email;
     private String cpfOuCnpj;
     private String senha;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "PERFIS")
+    private Set<Integer> perfilCliente = new HashSet<>();
+
 
     private Integer tipoCliente;
 
@@ -71,7 +79,15 @@ public class Cliente implements Serializable {
         return TipoCliente.toEnum(tipoCliente);
     }
 
-    public void atualizar(AtualizarClienteDTO clienteDTO){
+    public void addPerfilCliente(PerfilCliente perfilCliente) {
+        this.perfilCliente.add(perfilCliente.getCod());
+    }
+
+    public Set<PerfilCliente> getPerfilCliente() {
+        return perfilCliente.stream().map(p -> PerfilCliente.toEnum(p)).collect(Collectors.toSet());
+    }
+
+    public void atualizar(AtualizarClienteDTO clienteDTO) {
         this.setId(clienteDTO.id());
         this.setNome(clienteDTO.nome());
         this.setEmail(clienteDTO.email());

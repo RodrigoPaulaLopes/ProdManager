@@ -6,13 +6,13 @@ import com.rodrigo.ProdManager.enums.PerfilCliente;
 import com.rodrigo.ProdManager.enums.TipoCliente;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode(of = "id")
 @Entity
 @Table(name = "clientes")
-public class Cliente implements Serializable {
+public class Cliente implements Serializable, UserDetails {
     @Serial
     private final static long serialVersionUID = 1L;
 
@@ -97,4 +97,39 @@ public class Cliente implements Serializable {
     }
 
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<PerfilCliente> perfis = new HashSet<>();
+        return perfis.stream().map(p -> new SimpleGrantedAuthority(p.getTipo())).collect(Collectors.toList());
+    }
+
+    @Override
+    public String getPassword() {
+        return this.getSenha();
+    }
+
+    @Override
+    public String getUsername() {
+        return this.getEmail();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

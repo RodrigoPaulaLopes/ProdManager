@@ -12,6 +12,9 @@ import com.rodrigo.ProdManager.repository.EstadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,7 +24,7 @@ import java.util.Arrays;
 
 
 @Service
-public class ClienteService {
+public class ClienteService implements UserDetailsService {
 
     @Autowired
     private ClienteRepository clienteRepository;
@@ -76,5 +79,10 @@ public class ClienteService {
     public void delete(long id) {
         var cliente = clienteRepository.getReferenceById(id);
         clienteRepository.delete(cliente);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return this.clienteRepository.findByEmail(email);
     }
 }

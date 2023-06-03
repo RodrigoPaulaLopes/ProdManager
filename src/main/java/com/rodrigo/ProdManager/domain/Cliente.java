@@ -35,6 +35,7 @@ public class Cliente implements Serializable, UserDetails {
         this.setEmail(email);
         this.setCpfOuCnpj(cpfOuCnpj);
         this.setTipoCliente(tipoCliente);
+        this.addPerfilCliente(PerfilCliente.CLIENTE);
     }
 
     public Cliente(InserirClienteDTO dados) {
@@ -43,6 +44,7 @@ public class Cliente implements Serializable, UserDetails {
         this.setCpfOuCnpj(dados.cpfOuCnpj());
         this.setSenha(dados.senha());
         this.setTipoCliente(TipoCliente.toEnum(dados.tipo()));
+        this.addPerfilCliente(PerfilCliente.CLIENTE);
     }
 
 
@@ -56,7 +58,7 @@ public class Cliente implements Serializable, UserDetails {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "PERFIS")
-    private Set<Integer> perfilCliente = new HashSet<>();
+    private Set<PerfilCliente> perfilCliente = new HashSet<>();
 
 
     private Integer tipoCliente;
@@ -80,11 +82,11 @@ public class Cliente implements Serializable, UserDetails {
     }
 
     public void addPerfilCliente(PerfilCliente perfilCliente) {
-        this.perfilCliente.add(perfilCliente.getCod());
+        this.perfilCliente.add(perfilCliente);
     }
 
     public Set<PerfilCliente> getPerfilCliente() {
-        return perfilCliente.stream().map(p -> PerfilCliente.toEnum(p)).collect(Collectors.toSet());
+        return perfilCliente;
     }
 
     public void atualizar(AtualizarClienteDTO clienteDTO) {
@@ -99,8 +101,7 @@ public class Cliente implements Serializable, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<PerfilCliente> perfis = new HashSet<>();
-        return perfis.stream().map(p -> new SimpleGrantedAuthority(p.getTipo())).collect(Collectors.toList());
+        return perfilCliente.stream().map(p -> new SimpleGrantedAuthority(p.getTipo())).collect(Collectors.toList());
     }
 
     @Override

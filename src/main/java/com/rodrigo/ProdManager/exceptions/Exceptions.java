@@ -1,7 +1,9 @@
 package com.rodrigo.ProdManager.exceptions;
 
+import com.auth0.jwt.exceptions.SignatureVerificationException;
 import jakarta.persistence.EntityNotFoundException;
 
+import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +20,6 @@ public class Exceptions {
     public ResponseEntity entidadeNaoEncotrada(){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorDTO("Recurso não encontrado"));
     }
-
-
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity integrityError(){
         return ResponseEntity.badRequest().body(new ErrorDTO("Você não pode deletar um objeto que tenha outros objetos associados a ele."));

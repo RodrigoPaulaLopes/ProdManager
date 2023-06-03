@@ -3,11 +3,13 @@ package com.rodrigo.ProdManager.resources;
 import com.rodrigo.ProdManager.domain.Cliente;
 import com.rodrigo.ProdManager.dtos.*;
 import com.rodrigo.ProdManager.services.ClienteService;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.function.EntityResponse;
@@ -51,6 +53,7 @@ public class ClienteResource {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity delete(@PathVariable long id){
         clienteService.delete(id);
         return ResponseEntity.noContent().build();

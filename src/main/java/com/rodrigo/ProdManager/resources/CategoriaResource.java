@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -32,6 +33,7 @@ public class CategoriaResource {
 
     @PostMapping
     @Transactional
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<ListarCategoriaDTO> create(@Valid @RequestBody InserirCategoriaDTO dados, UriComponentsBuilder builder){
         var categoria = categoriaService.create(dados);
         var uri = builder.path("/categorias/{id}").buildAndExpand(categoria.id()).toUri();
@@ -41,6 +43,7 @@ public class CategoriaResource {
 
     @PutMapping
     @Transactional
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<ListarCategoriaDTO> update(@Valid  @RequestBody AtualizarCategoriaDTO dados){
         var categoria = categoriaService.update(dados);
         return ResponseEntity.ok().body(categoria);
@@ -48,6 +51,7 @@ public class CategoriaResource {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity delete(@PathVariable long id){
          categoriaService.delete(id);
         return ResponseEntity.noContent().build();

@@ -1,10 +1,9 @@
 package com.rodrigo.ProdManager.services;
 
-import com.rodrigo.ProdManager.domain.Categoria;
 import com.rodrigo.ProdManager.domain.Cliente;
 import com.rodrigo.ProdManager.domain.Endereco;
 import com.rodrigo.ProdManager.dtos.*;
-import com.rodrigo.ProdManager.enums.TipoCliente;
+import com.rodrigo.ProdManager.enums.PerfilCliente;
 import com.rodrigo.ProdManager.repository.CidadeRepository;
 import com.rodrigo.ProdManager.repository.ClienteRepository;
 import com.rodrigo.ProdManager.repository.EnderecoRepository;
@@ -12,15 +11,15 @@ import com.rodrigo.ProdManager.repository.EstadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Set;
 
 
 @Service
@@ -41,8 +40,13 @@ public class ClienteService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UserAuthenticatedService userAuthenticatedService;
+
     public Page<ListarClientesDTO> findAll(Pageable paginacao){
-        return clienteRepository.findAll(paginacao).map(ListarClientesDTO::new);
+        var hasRole = userAuthenticatedService.hasRoleAdmin();
+        var cliente = userAuthenticatedService.clientAutenticado();
+        return hasRole ? clienteRepository.findAll(paginacao).map(ListarClientesDTO::new) : clienteRepository.findById(paginacao, cliente.getId()).map(ListarClientesDTO::new);
     }
 
     public ListarClientesDTO findById(Long id){
@@ -84,5 +88,20 @@ public class ClienteService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return this.clienteRepository.findByEmail(email);
+    }
+
+    public Cliente clientAutenticado(){
+        return (Cliente) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+    public Boolean hasRoleAdmin(){
+        var cliente = this.clientAutenticado();
+        Set<PerfilCliente> perfis =  cliente.getPerfilCliente();
+        boolean hasRole = false;
+        for(PerfilCliente perfil : perfis){
+            if(perfil.getCod() == 1){
+                hasRole = true;
+            }
+        }
+        return hasRole;
     }
 }

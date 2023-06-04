@@ -8,6 +8,7 @@ import com.rodrigo.ProdManager.dtos.InserirPedidoDTO;
 import com.rodrigo.ProdManager.dtos.ListarPedidoDTO;
 import com.rodrigo.ProdManager.enums.EstadoPagamento;
 import com.rodrigo.ProdManager.repository.*;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,8 +45,14 @@ public class PedidoService {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private UserAuthenticatedService userAuthenticatedService;
+
     public Page<ListarPedidoDTO> findAll(Pageable paginacao) {
-        return pedidoRepository.findAll(paginacao).map(ListarPedidoDTO::new);
+
+        var hasRole = userAuthenticatedService.hasRoleAdmin();
+        var cliente = userAuthenticatedService.clientAutenticado();
+        return hasRole ? pedidoRepository.findAll(paginacao).map(ListarPedidoDTO::new) : pedidoRepository.findByClienteId(paginacao, cliente.getId()).map(ListarPedidoDTO::new);
     }
 
     public ListarPedidoDTO findById(Integer id) {

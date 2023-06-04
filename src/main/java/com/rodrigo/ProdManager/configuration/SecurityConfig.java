@@ -30,6 +30,7 @@ public class SecurityConfig {
 
     @Autowired
     private AutenticacaoFilter autenticacaoFilter;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -41,7 +42,7 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers(HttpMethod.POST, "/autenticacao")
+                .requestMatchers(HttpMethod.POST, "/autenticacao/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

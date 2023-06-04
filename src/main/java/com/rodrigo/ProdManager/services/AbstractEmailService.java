@@ -1,5 +1,6 @@
 package com.rodrigo.ProdManager.services;
 
+import com.rodrigo.ProdManager.domain.Cliente;
 import com.rodrigo.ProdManager.domain.Pedido;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -64,5 +65,22 @@ public abstract class AbstractEmailService implements EmailService {
         mimeMessageHelper.setSentDate(new Date(System.currentTimeMillis()));
         mimeMessageHelper.setText(htmlFromTemplatePedido(obj), true);
         return mimeMessage;
+    }
+
+    @Override
+    public  void sendNewPassword(Cliente cliente, String newPass){
+        SimpleMailMessage simpleMailMessage = prepareNewPasswordEmail(cliente, newPass);
+        sendEmail(simpleMailMessage);
+    }
+
+    protected SimpleMailMessage prepareNewPasswordEmail(Cliente cliente, String newPass){
+        SimpleMailMessage sm = new SimpleMailMessage();
+
+        sm.setTo(cliente.getEmail());
+        sm.setFrom(from);
+        sm.setSubject("Nova senha gerada: " + cliente.getId());
+        sm.setSentDate(new Date(System.currentTimeMillis()));
+        sm.setText("Nova senha: " + newPass);
+        return sm;
     }
 }

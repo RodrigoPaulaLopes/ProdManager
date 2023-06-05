@@ -12,10 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.function.EntityResponse;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.swing.text.html.parser.Entity;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/clientes")
@@ -57,6 +59,15 @@ public class ClienteResource {
     public ResponseEntity delete(@PathVariable long id){
         clienteService.delete(id);
         return ResponseEntity.noContent().build();
+
+    }
+
+    @PostMapping("/foto")
+    @Transactional
+    public ResponseEntity<ListarClientesDTO> uploadFile(@RequestParam("file") MultipartFile file){
+        URI uri = clienteService.enviarFoto(file);
+
+        return ResponseEntity.created(uri).build();
 
     }
 

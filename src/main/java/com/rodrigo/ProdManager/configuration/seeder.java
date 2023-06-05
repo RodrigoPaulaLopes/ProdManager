@@ -48,7 +48,6 @@ public class seeder implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        s3Service.uploadFile("C:\\Users\\Rodri\\Pictures\\Screenshots\\guitarra.png");
 
         var c1 = new Categoria(null, "Eletrônicos");
         var c2 = new Categoria(null, "Games");

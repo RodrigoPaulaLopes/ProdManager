@@ -17,7 +17,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Set;
 
@@ -42,14 +46,16 @@ public class ClienteService implements UserDetailsService {
 
     @Autowired
     private UserAuthenticatedService userAuthenticatedService;
+    @Autowired
+    private S3Service s3Service;
 
-    public Page<ListarClientesDTO> findAll(Pageable paginacao){
+    public Page<ListarClientesDTO> findAll(Pageable paginacao) {
         var hasRole = userAuthenticatedService.hasRoleAdmin();
         var cliente = userAuthenticatedService.clientAutenticado();
         return hasRole ? clienteRepository.findAll(paginacao).map(ListarClientesDTO::new) : clienteRepository.findById(paginacao, cliente.getId()).map(ListarClientesDTO::new);
     }
 
-    public ListarClientesDTO findById(Long id){
+    public ListarClientesDTO findById(Long id) {
         return new ListarClientesDTO(clienteRepository.getReferenceById(id));
     }
 
@@ -60,6 +66,7 @@ public class ClienteService implements UserDetailsService {
         cliente.atualizar(dados);
         return new ListarClientesDTO(clienteRepository.save(cliente));
     }
+
     public ListarClientesDTO create(InserirClienteDTO dados) {
         var cidade = cidadeRepository.getReferenceById(dados.cidadeId());
         var estado = estadoRepository.getReferenceById(dados.estadoId());
@@ -90,18 +97,24 @@ public class ClienteService implements UserDetailsService {
         return this.clienteRepository.findByEmail(email);
     }
 
-    public Cliente clientAutenticado(){
+    public Cliente clientAutenticado() {
         return (Cliente) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
-    public Boolean hasRoleAdmin(){
+
+    public Boolean hasRoleAdmin() {
         var cliente = this.clientAutenticado();
-        Set<PerfilCliente> perfis =  cliente.getPerfilCliente();
+        Set<PerfilCliente> perfis = cliente.getPerfilCliente();
         boolean hasRole = false;
-        for(PerfilCliente perfil : perfis){
-            if(perfil.getCod() == 1){
+        for (PerfilCliente perfil : perfis) {
+            if (perfil.getCod() == 1) {
                 hasRole = true;
             }
         }
         return hasRole;
+    }
+
+    public URI enviarFoto(MultipartFile multipartFile){
+
+        return s3Service.uploadFile(multipartFile);
     }
 }

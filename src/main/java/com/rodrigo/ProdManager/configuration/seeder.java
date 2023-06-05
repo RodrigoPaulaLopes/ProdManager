@@ -1,9 +1,11 @@
 package com.rodrigo.ProdManager.configuration;
 
+import com.amazonaws.services.s3.AmazonS3;
 import com.rodrigo.ProdManager.domain.*;
 import com.rodrigo.ProdManager.enums.EstadoPagamento;
 import com.rodrigo.ProdManager.enums.TipoCliente;
 import com.rodrigo.ProdManager.repository.*;
+import com.rodrigo.ProdManager.services.S3Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -41,10 +43,12 @@ public class seeder implements CommandLineRunner {
     @Autowired
     private ItemPedidoRepository itemPedidoRepository;
 
-
+    @Autowired
+    private S3Service s3Service;
     @Override
     public void run(String... args) throws Exception {
 
+        s3Service.uploadFile("C:\\Users\\Rodri\\Pictures\\Screenshots\\guitarra.png");
 
         var c1 = new Categoria(null, "Eletrônicos");
         var c2 = new Categoria(null, "Games");

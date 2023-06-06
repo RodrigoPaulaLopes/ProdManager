@@ -29,6 +29,8 @@ public class Exceptions {
         var error = ex.getFieldErrors();
         return ResponseEntity.badRequest().body(error.stream().map(Validacao::new).toList());
     }
+
+
     public record ErrorDTO(String mensagem){
 
     }

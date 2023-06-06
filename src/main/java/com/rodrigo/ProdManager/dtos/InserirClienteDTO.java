@@ -18,6 +18,8 @@ public record InserirClienteDTO(
         String senha,
         @NotNull
         Integer tipo,
+
+        @NotBlank String imagemUrl,
         @NotBlank(message = "Campo não pode estar vazio")
         String logradouro,
         @NotBlank(message = "Campo não pode estar vazio")

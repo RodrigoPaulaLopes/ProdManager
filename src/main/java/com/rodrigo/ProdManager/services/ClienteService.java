@@ -115,6 +115,15 @@ public class ClienteService implements UserDetailsService {
 
     public URI enviarFoto(MultipartFile multipartFile){
 
-        return s3Service.uploadFile(multipartFile);
+        var cliAuth = this.clientAutenticado();
+        var cliente = clienteRepository.getReferenceById(cliAuth.getId());
+        var uri = s3Service.uploadFile(multipartFile);
+
+        cliente.setImagemUrl(uri.toString());
+
+        clienteRepository.save(cliente);
+
+        return uri;
+
     }
 }

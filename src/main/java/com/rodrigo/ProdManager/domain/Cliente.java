@@ -56,6 +56,8 @@ public class Cliente implements Serializable, UserDetails {
     private String cpfOuCnpj;
     private String senha;
 
+    private String imagemUrl;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "PERFIS")
     private Set<PerfilCliente> perfilCliente = new HashSet<>();
